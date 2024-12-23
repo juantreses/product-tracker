@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\Table(name: 'product')]
+#[ORM\UniqueConstraint(name: 'UNIQ_CODE', columns: ['code'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_NAME', columns: ['name'])]
 class Product
 {
     #[ORM\Id]
@@ -27,7 +30,7 @@ class Product
     /**
      * @var Collection<int, ProductHistory>
      */
-    #[ORM\OneToMany(targetEntity: ProductHistory::class, mappedBy: 'product_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ProductHistory::class, mappedBy: 'product_id', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $productHistories;
 
     public function __construct()
